@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="container mx-auto space-y-12">
+    <nav class="w-full p-3 flex justify-between items-center">
+        <h1 class="text-2xl font-semibold">Dashboard</h1>
+        <div class="relative">
+            <button id="dropdownButton" class="focus:outline-none">
+                <span id="usernameDisplay" class="text-lg"></span> ▼
+            </button>
+            <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 hidden shadow rounded p-3 flex flex-col">
+                <a href="#" class="w-full hover:bg-black hover:text-white p-2">Profile</a>
+                <a id="buttonLogout" class="w-full hover:bg-black hover:text-white p-2 hover:cursor-pointer">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3">
+                        Nama Produk
+                    </th>
+                    <th class="px-6 py-3">
+                        Harga
+                    </th>
+                    <th class="px-6 py-3">
+                        Aksi
+                    </th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr class="bg-white border-b">
+                    <th class="px-6 py-4 font-medium text-black">
+                        Apple MacBook Pro 17"
+                    </th>
+                    <td class="px-6 py-4">
+                        $2999
+                    </td>
+                </tr>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <th class="px-6 py-4 font-medium text-black">
+                        Microsoft Surface Pro
+                    </th>
+                    <td class="px-6 py-4">
+                        $1999
+                    </td>
+                    <td class="px-6 py-4 space-y-2">
+                        <a class="block bg-yellow-600 w-1/4 text-center text-white p-1 rounded">Edit</a>
+                        <button class="block bg-red-600 w-1/4 text-center text-white p-1 rounded">Hapus</button>
+                    </td>
+                </tr>
+                <tr class="bg-white dark:bg-gray-800">
+                    <th class="px-6 py-4 font-medium text-black">
+                        Magic Mouse 2
+                    </th>
+                    <td class="px-6 py-4">
+                        $99
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+</body>
+
+<script>
+    let products = [
+        { id: 'pocof3', name: 'POCO F3', price: '5.500.000' },
+        { id: 'samsunga55', name: 'Samsung A55', price: '5.100.000' },
+    ];
+
+    window.onload = function () {
+        if (localStorage.getItem('isAuthenticated') !== 'true') {
+            window.location.href = 'login.html';
+        } else {
+            document.getElementById('usernameDisplay').innerText = `Selamat Datang, ${localStorage.getItem('username')}`;
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('username');
+        window.location.href = 'login.html';
+    }
+
+    function deleteData(id) {
+        products = products.filter((e) => e.id !== id);
+        renderTable();
+    }
+
+    function renderTable() {
+        const tableBody = document.querySelector('#tableBody');
+        tableBody.innerHTML = products.map((e, i) => `
+        <tr class="bg-white border-b">
+            <th class="px-6 py-4 font-medium text-black">${e.name}</th>
+            <td class="px-6 py-4">${e.price}</td>
+            <td class="px-6 py-4 space-y-2">
+                <a class="block bg-yellow-600 w-full lg:w-1/4 text-center text-white p-1 rounded">Edit</a>
+                <button id="buttonDelete${i}" class="block bg-red-600 w-full lg:w-1/4 text-center text-white p-1 rounded">Hapus</button>
+            </td>
+        </tr>`)
+        products.forEach((e, i) => document.querySelector(`#buttonDelete${i}`).addEventListener('click', () => deleteData(e.id)));
+    }
+
+    const buttonLogout = document.querySelector('#buttonLogout');
+    const dropdownButton = document.querySelector('#dropdownButton');
+    const dropdownMenu = document.querySelector('#dropdownMenu');
+
+    buttonLogout.addEventListener('click', () => logout());
+    dropdownButton.addEventListener('click', () => dropdownMenu.classList.toggle('hidden'));
+
+    renderTable();
+</script>
+
+</html>

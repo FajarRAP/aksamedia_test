@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <main class="min-h-screen flex flex-col justify-center items-center">
+        <div class="shadow rounded p-12 space-y-6">
+            <div class="flex flex-col">
+                <label for="username">Username</label>
+                <input type="text" id="username" class="border border-gray-300 rounded p-2.5">
+            </div>
+            <div class="flex flex-col">
+                <label for="password">Password</label>
+                <input type="text" id="password" class="border border-gray-300 rounded p-2.5">
+            </div>
+            <button id="buttonLogin" class="bg-black text-white font-semibold w-full p-2.5 rounded">Login</button>
+        </div>
+    </main>
+</body>
+<script>
+    const USERNAME = 'fajar';
+    const PASSWORD = 'fajar';
+
+    function login(event) {
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        if (username === USERNAME && password === PASSWORD) {
+            localStorage.setItem('isAuthenticated', 'true');
+            localStorage.setItem('username', username);
+            window.location.href = 'dashboard.html';
+        } else {
+            alert('Invalid credentials');
+        }
+    }
+
+    const buttonLogin = document.querySelector('#buttonLogin');
+    buttonLogin.addEventListener('click', (event) => login(event));
+</script>
+
+</html>
